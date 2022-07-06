@@ -1,0 +1,295 @@
+openapi: 3.0.3
+info:
+  title: TestProject
+  description: TestProject
+  version: 1.0.0
+servers:
+  -
+    url: 'https://localhost/api/v1'
+paths:
+  /user:
+    post:
+      summary: Создает пользователя
+      tags:
+        - User
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createUserRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserDataResponse'
+  /user/{user_id}/author:
+    post:
+      summary: Переводит пользователя из обычного юзера в автора статьи
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getUserDataResponse'
+  /category:
+    post:
+      summary: Создает категорию
+      tags:
+        - Category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createCategoryRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCategoryDataResponse'
+  /user/{user_id}/article:
+    post:
+      summary: Создает статью
+      tags:
+        - Article
+      parameters:
+        -
+          name: user_id
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createArticleRequest'
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getArticleDataResponse'
+
+  /user/{user_id}/article/{article_id}/vote:
+    post:
+      summary: Поставить лайк статье
+      parameters:
+        - name: user_id
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+        - name: article_id
+          in: path
+          description: Идентификатор статьи
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: CREATED
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getArticleDataResponse'
+  /user/{user_id}/article/{article_id}/vote/{vote_id}:
+    delete:
+      summary: Удаляет лайк у статьи
+      tags:
+        - Article
+      parameters:
+        -
+          name: user_id
+          in: path
+          description: Идентификатор пользователя
+          required: true
+          schema:
+            type: integer
+        -
+          name: article_id
+          in: path
+          description: Идентификатор статьи
+          required: true
+          schema:
+            type: integer
+        - name: vote_id
+          in: path
+          description: Идентификатор лайка
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: No content
+  /article:
+    get:
+      summary: Выодит статьи с фитром по категориям и пагинацией
+      parameters:
+        - name: category
+          in: query
+          description: id категрии
+          required: false
+          schema:
+            type: array
+            items:
+              type: integer
+        - name: limit
+          in: query
+          description: Лимит
+          required: false
+          schema:
+            type: integer
+        - name: offset
+          in: query
+          description: Офсет
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getArticlesDataResponse'
+components:
+  schemas:
+    createUserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Петя Камушкин
+          description: Имя пользователя
+    getUserDataResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/user'
+    user:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор пользователя
+          example: 10
+        name:
+          type: string
+          description: Имя пользователя
+          example: Петя Камушкин
+        created_at:
+          type: string
+          description: время создания
+          example: 2022-07-06T14:12:43+03:00
+    createCategoryRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Название категории
+          example: Сельское хозяйство
+    getCategoryDataResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/category'
+    category:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор категории
+          example: 10
+        title:
+          type: string
+          description: Название категории
+          example: Наука и жизнь
+        created_at:
+          type: string
+          description: Время создания
+          example: 2022-07-06T14:12:43+03:00
+    createArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          description: Заголовок сатьи
+          example: Есть ли жизнь на марсе?
+        categies:
+          type: array
+          items:
+            type: integer
+            description: Ид категории
+            example: 10
+    getArticleDataResponse:
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/article'
+    article:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: идентифкатор статьи
+          example: 10
+        title:
+          type: string
+          example: Были ли американцы на луне
+          description: Заголовок статьи
+        categories:
+          type: array
+          items:
+            $ref: '#/components/schemas/category'
+        author:
+          $ref: '#/components/schemas/user'
+        published_at:
+          type: string
+          description: время публикации
+          example: 2022-07-06T14:12:43+03:00
+        rating:
+          type: integer
+          example: 10
+          description: Количество лайков
+        votes:
+          type: array
+          items:
+            type: object
+            properties:
+              user:
+                $ref: '#/components/schemas/user'
+              vote_id:
+                type: integer
+                description: Идентификатор лайка
+                example: 10
+    getArticlesDataResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            items:
+              type: array
+              items:
+                $ref: '#/components/schemas/article'
+            items_count:
+              type: integer
+              description: Количество записей
+              example: 10
