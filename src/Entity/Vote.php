@@ -20,13 +20,13 @@ class Vote
      * @var User
      */
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'votes')]
-    public User $user;
+    private User $user;
 
     /**
      * @var Article
      */
     #[ORM\ManyToOne(targetEntity: Article::class, inversedBy: 'votes')]
-    public Article $article;
+    private Article $article;
 
     /**
      * @param User    $user
