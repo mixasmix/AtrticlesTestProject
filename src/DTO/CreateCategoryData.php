@@ -5,16 +5,10 @@ namespace App\DTO;
 class CreateCategoryData
 {
     /**
-     * @var string
-     */
-    private string $title;
-
-    /**
      * @param string $title
      */
-    public function __construct(string $title)
+    public function __construct(private string $title)
     {
-        $this->title = $title;
     }
 
     /**

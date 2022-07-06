@@ -5,16 +5,10 @@ namespace App\DTO;
 class CreateUserData
 {
     /**
-     * @var string
-     */
-    private string $name;
-
-    /**
      * @param string $name
      */
-    public function __construct(string $name)
+    public function __construct(private string $name)
     {
-        $this->name = $name;
     }
 
     /**
