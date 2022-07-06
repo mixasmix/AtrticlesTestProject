@@ -2,6 +2,27 @@ version: '3'
 
 services:
 ###> doctrine/doctrine-bundle ###
+  base:
+    build:
+      dockerfile: ./docker/base/Dockerfile
+      context: ./
+    links:
+      - database
+    ports:
+      - "9000:9000"
+  nginx:
+    build:
+      dockerfile: ./docker/nginx/Dockerfile
+      context: ./
+    links:
+      - base
+    depends_on:
+      - base
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./docker/ngnix/default.conf:/etc/nginx/conf.d/default.conf
+      - ./:/symfony
   database:
     image: postgres:${POSTGRES_VERSION:-13}-alpine
     environment:
