@@ -42,27 +42,25 @@ class ArticleFacade
         Author $author,
         CreateArticleData $articleData
     ): Article {
-        $categories = $this->categoryRepository->getByIds(
-            $articleData->getCategoryIds(),
-        );
+        $categories = $this->categoryRepository->getByIds($articleData->getCategoryIds());
 
         $article = $this->articleService->create(
-            $author,
-            $articleData->getTitle(),
-            $categories,
+            author: $author,
+            title: $articleData->getTitle(),
+            categories: $categories,
         );
 
         //добавляем каждую статью в категорию и каждую категорию в статью
         array_map(
             function (Category $category) use ($article): Category {
                 $this->categoryService->addArticle(
-                    $category,
-                    $article,
+                    category: $category,
+                    article: $article,
                 );
 
                 $this->articleService->addCategory(
-                    $article,
-                    $category,
+                    article: $article,
+                    category: $category,
                 );
 
                 return $category;
@@ -77,20 +75,20 @@ class ArticleFacade
      * @param User    $user
      * @param Article $article
      *
-     * @return Vote
+     * @return Article
      *
      * @throws Throwable
      */
     public function createVote(User $user, Article $article): Article
     {
         $vote = $this->voteService->create(
-            $user,
-            $article,
+            user: $user,
+            article: $article,
         );
 
         return $this->articleService->addVote(
-            $article,
-            $vote,
+            article: $article,
+            vote: $vote,
         );
     }
 

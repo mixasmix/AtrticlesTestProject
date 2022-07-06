@@ -42,6 +42,9 @@ class CreateArticleDataResolver implements ArgumentValueResolverInterface
         );
 
         //через валидатор прогонять не буду, лень
-        yield new CreateArticleData($params['title'], $params['categories']);
+        yield new CreateArticleData(
+            title: $params['title'],
+            categoryIds: $params['categories'],
+        );
     }
 }
