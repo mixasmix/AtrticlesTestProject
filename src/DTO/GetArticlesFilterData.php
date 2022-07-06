@@ -5,16 +5,10 @@ namespace App\DTO;
 class GetArticlesFilterData
 {
     /**
-     * @var array
-     */
-    private array $categoryIds;
-
-    /**
      * @param array $categoryIds
      */
-    public function __construct(array $categoryIds)
+    public function __construct(private array $categoryIds)
     {
-        $this->categoryIds = $categoryIds;
     }
 
     /**

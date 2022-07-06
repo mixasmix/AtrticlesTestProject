@@ -5,23 +5,11 @@ namespace App\DTO;
 class PaginationData
 {
     /**
-     * @var int|null
-     */
-    private ?int $limit;
-
-    /**
-     * @var int|null
-     */
-    private ?int $offset;
-
-    /**
      * @param int|null $limit
      * @param int|null $offset
      */
-    public function __construct(?int $limit, ?int $offset)
+    public function __construct(private ?int $limit, private ?int $offset)
     {
-        $this->limit = $limit;
-        $this->offset = $offset;
     }
 
     /**
