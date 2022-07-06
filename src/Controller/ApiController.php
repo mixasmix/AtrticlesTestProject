@@ -112,8 +112,8 @@ class ApiController extends AbstractController
     ): JsonResponse {
         return $this->json([
             'data' => $this->articleFacade->createArticle(
-                $author,
-                $articleData,
+                author: $author,
+                articleData: $articleData,
             ),
         ], Response::HTTP_CREATED);
     }
@@ -141,10 +141,10 @@ class ApiController extends AbstractController
     ): JsonResponse {
         return $this->json([
             //в фасаде статей потому что под голосовалку отдельный фасад заводить жирно,
-            // а голосовалка в контексте статьи
+            //а голосовалка в контексте статьи
             'data' => $this->articleFacade->createVote(
-                $user,
-                $article,
+                user: $user,
+                article: $article,
             ),
         ], Response::HTTP_CREATED);
     }
@@ -221,9 +221,9 @@ class ApiController extends AbstractController
         return $this->json([
             'data' => [
                 'items' => $this->articleRepository->getByFilter(
-                    $filterData->getCategoryIds(),
-                    $paginationData->getLimit(),
-                    $paginationData->getOffset(),
+                    categoryIds: $filterData->getCategoryIds(),
+                    limit: $paginationData->getLimit(),
+                    offset: $paginationData->getOffset(),
                 ),
                 'items_count' => $this->articleRepository->getByFilterCount(
                     $filterData->getCategoryIds(),
